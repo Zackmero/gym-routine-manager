@@ -1,0 +1,36 @@
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Expo / React Native
+.expo
+.expo-shared
+*.apk
+*.aab
+
+# Next.js
+.next
+out
+.vercel
+
+# Logs
+logs
+*.log
+*.pid
+*.seed
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite-journal
+
+# Build
+dist
+build

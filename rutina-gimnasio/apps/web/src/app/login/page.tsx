@@ -18,6 +18,8 @@ export default function LoginPage() {
   const [errorValidation, setErrorValidation] = useState<{ email?: string; password?: string; general?: string }>({});
 
   const [isLogin, setIsLogin] = useState(true);
+
+  const API_URL = process.env.REACT_APP_API_URL;
   
 
 
@@ -51,7 +53,7 @@ export default function LoginPage() {
 
     if (!validate()) return;
 
-    const url = isLogin ? "http://localhost:4000/auth/login" : "http://localhost:4000/auth/register";
+    const url = isLogin ? `${API_URL}auth/login` : `${API_URL}/auth/register`;
 
     const body = isLogin ? { email, password } : { name, email, password };
 

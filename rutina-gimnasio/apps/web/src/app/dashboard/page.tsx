@@ -16,6 +16,8 @@ export default function Dashboard() {
     const [showModal, setShowModal] = useState(false);
     const [selectedRoutine, setSelectedRoutine] = useState<Routine | null>(null);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         //* Get token from localStorage
         const token = localStorage.getItem('token');
@@ -27,7 +29,7 @@ export default function Dashboard() {
         }
 
         //* Obtain user data
-        fetch('http://localhost:4000/users/me', {
+        fetch(`${API_URL}/users/me`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -38,7 +40,7 @@ export default function Dashboard() {
             });
 
         //* Obtain routine data
-        fetch('http://localhost:4000/routines/', {
+        fetch(`${API_URL}/routines/`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
@@ -69,7 +71,7 @@ export default function Dashboard() {
     //* Delete Routine
     const handleDeleteRoutine = async (id: number) => {
         const token = localStorage.getItem('token');
-        const res = await fetch(`http://localhost:4000/routines/${id}`, {
+        const res = await fetch(`${API_URL}/routines/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

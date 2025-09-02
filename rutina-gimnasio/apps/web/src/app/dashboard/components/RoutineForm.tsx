@@ -12,6 +12,10 @@ interface RoutineFormProps {
 }
 
 export default function RoutineForm({ onAdd, onEdit, initialData }: RoutineFormProps) {
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
   const {
     register,
     handleSubmit,
@@ -38,7 +42,7 @@ export default function RoutineForm({ onAdd, onEdit, initialData }: RoutineFormP
 
     if (initialData) {
       //* Edit Mode
-      const res = await fetch(`http://localhost:4000/routines/${initialData.id}`, {
+      const res = await fetch(`${API_URL}/routines/${initialData.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
@@ -48,7 +52,7 @@ export default function RoutineForm({ onAdd, onEdit, initialData }: RoutineFormP
       onEdit(response.routine);
     } else {
       //* Add Mode
-      const res = await fetch("http://localhost:4000/routines", {
+      const res = await fetch(`${API_URL}/routines`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),

@@ -2,10 +2,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
-import authRoutes from "./routes/authRoutes";
-import routinesRoutes from "./routes/routinesRoutes";
-import usersRoutes from "./routes/usersRoutes";
-
 dotenv.config();
 
 const app = express();
@@ -14,76 +10,58 @@ const PORT = process.env.PORT || 3000;
 //* Middleware para parsear JSON
 app.use(express.json());
 
-//* Configuración de CORS - MEJORADA
-const allowedOrigins = [
-  "https://zack-tech.netlify.app",
-  "http://localhost:3000",     // Para desarrollo local
-  "http://localhost:5173",     // Si usas Vite
-  "http://localhost:3001"      // Backup para desarrollo
-];
+//* Configuración de CORS - MÁS PERMISIVA PARA DEBUGGING
+app.use(cors({
+  origin: '*', // ⚠️ TEMPORAL - solo para debugging
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false
+}));
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Permitir peticiones sin origin (Postman, apps móviles, etc.)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        console.log(`🚫 Origin bloqueado por CORS: ${origin}`);
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  // ✅ Agregué OPTIONS
-    allowedHeaders: [
-      "Origin",
-      "X-Requested-With", 
-      "Content-Type", 
-      "Accept", 
-      "Authorization",
-      "Cache-Control"
-    ],
-    credentials: true,
-    optionsSuccessStatus: 200  // ✅ Para navegadores legacy
-  })
-);
-
-// ✅ Middleware adicional para debugging CORS
-app.use((req, res, next) => {
-  console.log(`📡 ${req.method} ${req.path} - Origin: ${req.get('Origin') || 'No origin'}`);
-  next();
-});
-
-//! ----------------- ROUTES -----------------
-
-console.log("✅ Auth Routes:", authRoutes);
-console.log("✅ Users Routes:", usersRoutes);
-console.log("✅ Routines Routes:", routinesRoutes);
-
-//* Autenticación
-app.use("/auth", authRoutes);
-
-//* Usuarios
-app.use("/users", usersRoutes);
-
-//* Rutinas
-app.use("/routines", routinesRoutes);
-
-// ✅ Ruta de health check
-app.get("/health", (req, res) => {
+// ✅ RUTAS DE PRUEBA BÁSICAS (sin importar archivos externos)
+app.get("/", (req, res) => {
   res.json({ 
-    status: "OK", 
-    message: "Server is running",
-    timestamp: new Date().toISOString(),
-    cors: "Configured for " + allowedOrigins.join(", ")
+    message: "🏋️‍♂️ Gym Routine Manager API", 
+    status: "running",
+    timestamp: new Date().toISOString()
   });
 });
 
-//! -----------------------------------------
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "OK", 
+    message: "Server is running perfectly!",
+    port: PORT,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// ✅ Ruta de auth de prueba
+app.post("/auth/login", (req, res) => {
+  console.log("🔐 Login attempt received:", req.body);
+  res.json({ 
+    message: "Login endpoint working!",
+    received: req.body,
+    cors: "enabled"
+  });
+});
+
+// ✅ Capturar todas las rutas no encontradas
+app.use("*", (req, res) => {
+  res.status(404).json({
+    error: "Route not found",
+    method: req.method,
+    path: req.originalUrl,
+    available_routes: ["/", "/health", "/auth/login"]
+  });
+});
 
 //* Inicio del servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-  console.log(`🌐 Allowed origins:`, allowedOrigins);
+  console.log(`🚀 DEBUG SERVER running on port ${PORT}`);
+  console.log(`🌐 CORS: Permitido para todos los orígenes (TEMPORAL)`);
+  console.log(`📍 Test URLs:`);
+  console.log(`   - https://rutinas-gimnasio.onrender.com/`);
+  console.log(`   - https://rutinas-gimnasio.onrender.com/health`);
+  console.log(`   - https://rutinas-gimnasio.onrender.com/auth/login`);
 });

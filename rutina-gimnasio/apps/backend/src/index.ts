@@ -13,14 +13,26 @@ const PORT = process.env.PORT || 3000;
 //* Middleware to parse JSON
 app.use(express.json());
 
+//* Configuration of CORS
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://zack-tech.netlify.app",
+  "https://gym-routine-manager.onrender.com"
+];
+
 app.use(cors({
-  origin: ["http://localhost:3000",
-    "https://gym-routine-manager.onrender.com",
-    "https://zack-tech.netlify.app",
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: (origin, callback) => {
+    // Permitir llamadas desde Postman o curl (sin origin)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 }));
+
+//* Manual manager OPTIONS to preflight
+app.options("*", cors());
 
 //! ----------------ROUTES----------------------------
 //* Register Routes 

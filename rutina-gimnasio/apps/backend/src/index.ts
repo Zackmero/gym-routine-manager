@@ -18,7 +18,7 @@ app.use(cors({
     "https://gym-routine-manager.onrender.com",
     "https://zack-tech.netlify.app",
   ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 }));
 

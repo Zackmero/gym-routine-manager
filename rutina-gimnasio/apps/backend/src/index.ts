@@ -16,7 +16,6 @@ app.use(express.json());
 
 //* Configuración de CORS
 const allowedOrigins = [
-  "http://localhost:3000",
   "https://zack-tech.netlify.app",
 ];
 
@@ -32,10 +31,12 @@ app.use(
         return callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPtIONS"],
     credentials: true,
   })
 );
+
+app.options("*", cors());
 
 //! ----------------- RUTAS -----------------
 //* Autenticación

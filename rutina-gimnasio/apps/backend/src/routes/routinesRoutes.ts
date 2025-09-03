@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { createRoutine, deleteRoutine, getRoutines, updateRoutine } from "../controllers/routinesControlles";
-import { authenticationToken } from "../middleware/authenticatToken";
+import { createRoutine, deleteRoutine, getRoutines, updateRoutine } from "../controllers/routinesController";
+import { authenticationToken } from "../middleware/authenticateToken";
 
 const router = Router();
 

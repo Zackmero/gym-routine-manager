@@ -1,16 +1,54 @@
 {
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "project": "./tsconfig.json",
-    "sourceType": "module"
-  },
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "import"],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "prettier/prettier": "error"
+    "import/no-unresolved": "error",
+    "import/named": "error",
+    "import/no-named-as-default": "warn",
+    "import/no-named-as-default-member": "warn",
+    "import/no-extraneous-dependencies": "error",
+    "import/no-duplicates": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never",
+        "js": "never",
+        "jsx": "never"
+      }
+    ],
+    "import/no-useless-path-segments": "error",
+    "import/no-cycle": "error",
+    "import/no-absolute-path": "error",
+    "import/no-self-import": "error",
+    "import/no-mutable-exports": "error",
+    "import/no-amd": "error",
+    "import/no-commonjs": "warn",
+    "import/no-nodejs-modules": "off",
+    "import/no-deprecated": "warn",
+    "import/no-namespace": "off",
+    "import/no-unassigned-import": "warn",
+    "import/no-anonymous-default-export": "warn",
+    "import/first": "error",
+    "import/newline-after-import": "warn",
+    "import/no-dynamic-require": "error",
+    "import/no-internal-modules": "off",
+    "import/no-relative-packages": "error",
+    "import/no-relative-parent-imports": "off",
+    "import/no-restricted-paths": "off",
+    "import/no-unresolved": [
+      "error",
+      { "caseSensitive": true }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
   }
 }

@@ -14,8 +14,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(cors({
-  origin: ["http://localhost:3000", 
+  origin: ["http://localhost:3000",
     "https://gym-routine-manager.onrender.com",
+    "https://zack-tech.netlify.app",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,

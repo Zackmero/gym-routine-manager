@@ -1,8 +1,8 @@
 "use client";
 
+import { routineCreateSchema, RoutineFormDataCreate } from "@/app/validations/routinesValidations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { routineCreateSchema, RoutineFormDataCreate } from "../../../../../backend/src/validations/routinesValidations";
 import { Routine } from "./types";
 
 interface RoutineFormProps {

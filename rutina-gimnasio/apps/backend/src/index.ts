@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use(cors({
   origin: ["http://localhost:3000", 
-    "http://https://gym-routine-manager.onrender.com",
+    "https://gym-routine-manager.onrender.com",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,

@@ -40,7 +40,7 @@ export default function Dashboard() {
             });
 
         //* Obtain routine data
-        fetch(`${API_URL}/routines/`, {
+        fetch(`${API_URL}/routines`, {
             headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())

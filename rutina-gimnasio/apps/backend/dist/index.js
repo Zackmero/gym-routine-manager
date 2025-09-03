@@ -20,7 +20,6 @@ const allowedOrigins = [
 ];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        // Permitir solicitudes sin origin (Postman, curl)
         if (!origin)
             return callback(null, true);
         if (allowedOrigins.includes(origin)) {
@@ -30,11 +29,13 @@ app.use((0, cors_1.default)({
             return callback(new Error("Not allowed by CORS"));
         }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 }));
-app.options("*", (0, cors_1.default)());
 //! ----------------- RUTAS -----------------
+console.log("Auth Routes:", authRoutes_1.default);
+console.log("Users Routes:", usersRoutes_1.default);
+console.log("Routines Routes:", routinesRoutes_1.default);
 //* Autenticación
 app.use("/auth", authRoutes_1.default);
 //* Usuarios

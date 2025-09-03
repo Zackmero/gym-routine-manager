@@ -22,7 +22,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin: string | undefined, callback) => {
-      // Permitir solicitudes sin origin (Postman, curl)
+
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -31,7 +31,7 @@ app.use(
         return callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPtIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
@@ -39,6 +39,11 @@ app.use(
 app.options("*", cors());
 
 //! ----------------- RUTAS -----------------
+
+console.log("Auth Routes:", authRoutes);
+console.log("Users Routes:", usersRoutes);
+console.log("Routines Routes:", routinesRoutes);
+
 //* Autenticación
 app.use("/auth", authRoutes);
 

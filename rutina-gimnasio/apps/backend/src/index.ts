@@ -1,4 +1,4 @@
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 
@@ -11,41 +11,45 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//* Middleware to parse JSON
+//* Middleware para parsear JSON
 app.use(express.json());
 
-//* Allowed origins
-const allowedOrigins: string[] = [
+//* Configuración de CORS
+const allowedOrigins = [
   "http://localhost:3000",
   "https://zack-tech.netlify.app",
 ];
 
-//* Configuración de CORS con tipado explícito
-const corsOptions: CorsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    if (!origin) {
-      // permite Postman o curl
-      return callback(null, true);
-    }
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: (origin: string | undefined, callback) => {
+      // Permitir solicitudes sin origin (Postman, curl)
+      if (!origin) return callback(null, true);
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-//! ----------------ROUTES----------------------------
+//! ----------------- RUTAS -----------------
+//* Autenticación
 app.use("/auth", authRoutes);
-app.use("/users", usersRoutes);
-app.use("/routines", routinesRoutes);
-//! ---------------------------------------------------
 
-//* Start the server
+//* Usuarios
+app.use("/users", usersRoutes);
+
+//* Rutinas
+app.use("/routines", routinesRoutes);
+
+//! -----------------------------------------
+
+//* Inicio del servidor
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

@@ -9,7 +9,7 @@ import usersRoutes from "./routes/usersRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000 || "0.0.0.0";
 
 //* Middleware para parsear JSON
 app.use(express.json());

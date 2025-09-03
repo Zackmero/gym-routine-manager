@@ -16,7 +16,7 @@ export default function Dashboard() {
     const [showModal, setShowModal] = useState(false);
     const [selectedRoutine, setSelectedRoutine] = useState<Routine | null>(null);
 
-    const API_URL = process.env.REACT_APP_API_URL;
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
         //* Get token from localStorage

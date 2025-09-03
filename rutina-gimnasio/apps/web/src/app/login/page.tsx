@@ -19,7 +19,7 @@ export default function LoginPage() {
 
   const [isLogin, setIsLogin] = useState(true);
 
-  const API_URL = process.env.REACT_APP_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   
 
 
@@ -53,7 +53,8 @@ export default function LoginPage() {
 
     if (!validate()) return;
 
-    const url = isLogin ? `${API_URL}auth/login` : `${API_URL}/auth/register`;
+    const url = isLogin ? `${API_URL}/auth/login` : `${API_URL}/auth/register`;
+    console.log("📡 Haciendo request a:", url);
 
     const body = isLogin ? { email, password } : { name, email, password };
 

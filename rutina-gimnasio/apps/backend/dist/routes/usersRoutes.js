@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authenticationToken } from "../middleware/authenticateToken";
-import prisma from "../prisma/client";
+import { authenticationToken } from "../middleware/authenticateToken.js";
+import prisma from "../prisma/client.js";
 const router = Router();
 router.get("/me", authenticationToken, async (req, res) => {
     try {

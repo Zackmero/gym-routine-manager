@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { AuthRequest } from "../middleware/authenticateToken";
+import { AuthRequest } from "../middleware/authenticateToken.js";
 export declare const getRoutines: (req: AuthRequest, res: Response) => Promise<Response<any, Record<string, any>>>;
 export declare const createRoutine: (req: AuthRequest, res: Response) => Promise<Response<any, Record<string, any>>>;
 export declare const updateRoutine: (req: AuthRequest, res: Response) => Promise<Response<any, Record<string, any>>>;

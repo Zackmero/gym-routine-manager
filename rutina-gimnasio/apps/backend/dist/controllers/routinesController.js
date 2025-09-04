@@ -1,5 +1,5 @@
-import prisma from "../prisma/client";
-import { routineCreateSchema, routineUpdateSchema } from "../validations/routinesValidations";
+import prisma from "../prisma/client.js";
+import { routineCreateSchema, routineUpdateSchema } from "../validations/routinesValidations.js";
 export const getRoutines = async (req, res) => {
     try {
         const userId = req.userId;

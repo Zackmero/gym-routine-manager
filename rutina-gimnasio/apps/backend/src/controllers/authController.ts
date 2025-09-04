@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import prisma from "../prisma/client";
+import prisma from "../prisma/client.js";
 
 //! Register: create a new user into database --------------------------------------------------------
 export const registerUser = async (req: Request, res: Response) => {

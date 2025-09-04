@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { AuthRequest } from "../middleware/authenticateToken";
-import prisma from "../prisma/client";
-import { routineCreateSchema, routineUpdateSchema } from "../validations/routinesValidations";
+import { AuthRequest } from "../middleware/authenticateToken.js";
+import prisma from "../prisma/client.js";
+import { routineCreateSchema, routineUpdateSchema } from "../validations/routinesValidations.js";
 
 
 

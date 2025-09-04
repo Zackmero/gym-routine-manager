@@ -32,7 +32,7 @@ export const getRoutines = async (req: AuthRequest, res: Response) => {
             where: { userId },
         });
 
-        res.json(routines);
+        return res.json(routines);
         // res.json({
         //     page,
         //     limit,
@@ -43,7 +43,7 @@ export const getRoutines = async (req: AuthRequest, res: Response) => {
 
     } catch (error) {
         console.error("[Get Routines Error]:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -76,10 +76,10 @@ export const createRoutine = async (req: AuthRequest, res: Response) => {
         });
         console.log("Routine Created:", newRoutine);
 
-        res.status(201).json({ message: "Routine created successfully", routine: newRoutine })
+        return res.status(201).json({ message: "Routine created successfully", routine: newRoutine })
     } catch (error) {
         console.error("[Create Routine Error]:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -115,10 +115,10 @@ export const updateRoutine = async (req: AuthRequest, res: Response) => {
             data: { title, description, level },
         });
 
-        res.json({ message: "Routine updated successfully", routine: updateRoutine })
+        return res.json({ message: "Routine updated successfully", routine: updateRoutine })
     } catch (error) {
         console.error("[Update Routine Error]:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -145,9 +145,9 @@ export const deleteRoutine = async (req: AuthRequest, res: Response) => {
             where: { id: routineId },
         });
 
-        res.json({ message: "Routine deleted successfully", routine: deleteRoutine });
+        return res.json({ message: "Routine deleted successfully", routine: deleteRoutine });
     } catch (error) {
         console.error("[Delete Routine Error]:", error);
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 };

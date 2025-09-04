@@ -16,30 +16,35 @@ function isJwtPayload(decoded: string | object): decoded is JwtPayload {
     return typeof decoded === 'object' && decoded != null && 'sub' in decoded;
 }
 
+// ✅ CORREGIDO: Agregado tipo de retorno ': void'
 export const authenticationToken = (
     req: AuthRequest,
     res: Response,
     next: NextFunction
-) => {
+): void => {
     //* Extract token from Authorization header
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     //* Check if token exists
     if (!token) {
-        return res.status(401).json({ message: "Access token missing" });
+        res.status(401).json({ message: "Access token missing" });
+        return;
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
 
-        if (!isJwtPayload(decoded)) {
-            return res.status(403).json({ message: "Invalid token structure" });
+        // Verificación de tipo más simple
+        if (typeof decoded === 'object' && decoded && 'sub' in decoded) {
+            req.userId = (decoded as any).sub;
+            next();
+        } else {
+            res.status(403).json({ message: "Invalid token structure" });
+            return;
         }
-
-        req.userId = decoded.sub;
-        next();
     } catch (error) {
-        return res.status(403).json({ message: "Invalid token or expired" });
+        res.status(403).json({ message: "Invalid token or expired" });
+        return;
     }
 };

@@ -1,11 +1,11 @@
-import { Router } from "express";
+import { Response, Router } from "express";
 import { authenticationToken, AuthRequest } from "../middleware/authenticateToken";
 import prisma from "../prisma/client";
 
 const router = Router();
 
 //! Get details of current user
-router.get("/me", authenticationToken, async (req: AuthRequest, res) => {
+router.get("/me", authenticationToken, async (req: AuthRequest, res): Promise<Response> => {
     try {
         const user = await prisma.user.findUnique({
             where: {id: req.userId},
@@ -21,10 +21,10 @@ router.get("/me", authenticationToken, async (req: AuthRequest, res) => {
             return res.status(500).json({message: "User not found"});
         }
 
-        res.json(user);
+        return res.json(user);
     } catch (error) {
         console.error("[Get Users Error]:", error);
-        res.status(500).json({ message: "Internal sever error" });
+        return res.status(500).json({ message: "Internal sever error" });
     }
 });
 

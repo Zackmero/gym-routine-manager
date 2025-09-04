@@ -1,27 +1,17 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.registerUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const client_1 = __importDefault(require("../prisma/client"));
-//! Register: create a new user into database --------------------------------------------------------
-const registerUser = async (req, res) => {
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import prisma from "../prisma/client";
+export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        //* Check if user alreaty exists
-        const existingUser = await client_1.default.user.findUnique({
+        const existingUser = await prisma.user.findUnique({
             where: { email },
         });
         if (existingUser) {
             return res.status(400).json({ message: "Email is already registered" });
         }
-        //* Encrypt hash password
-        const hashedPassword = await bcrypt_1.default.hash(password, 10);
-        //* Save new user in DB
-        const newUser = await client_1.default.user.create({
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = await prisma.user.create({
             data: {
                 name,
                 email,
@@ -38,26 +28,20 @@ const registerUser = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
-exports.registerUser = registerUser;
-//! Login: Auithentication and response with generate JWT token -----------------------------------------------
-const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        //* Find user by emal
-        const user = await client_1.default.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: { email },
         });
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials: email not found" });
         }
-        //* Compare entered password with hash password
-        const isMatch = await bcrypt_1.default.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials: password incorrect" });
         }
-        //* Generate JWT token with id user
-        const token = jsonwebtoken_1.default.sign({ sub: user.id }, //^ sub = subject (user ID)
-        process.env.JWT_SECRET, {
+        const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
         return res.status(200).json({
@@ -75,4 +59,3 @@ const loginUser = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
-exports.loginUser = loginUser;

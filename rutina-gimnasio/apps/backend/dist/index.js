@@ -1,49 +1,52 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const express_1 = __importDefault(require("express"));
-const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-const routinesRoutes_1 = __importDefault(require("./routes/routinesRoutes"));
-const usersRoutes_1 = __importDefault(require("./routes/usersRoutes"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+dotenv.config();
+const app = express();
 const PORT = process.env.PORT || 3000;
-//* Middleware para parsear JSON
-app.use(express_1.default.json());
-//* Configuración de CORS
-const allowedOrigins = [
-    "https://zack-tech.netlify.app",
-];
-app.use((0, cors_1.default)({
-    origin: (origin, callback) => {
-        if (!origin)
-            return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-        else {
-            return callback(new Error("Not allowed by CORS"));
-        }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+app.use(express.json());
+app.use(cors({
+    origin: '*',
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false
 }));
-//! ----------------- RUTAS -----------------
-console.log("Auth Routes:", authRoutes_1.default);
-console.log("Users Routes:", usersRoutes_1.default);
-console.log("Routines Routes:", routinesRoutes_1.default);
-//* Autenticación
-app.use("/auth", authRoutes_1.default);
-//* Usuarios
-app.use("/users", usersRoutes_1.default);
-//* Rutinas
-app.use("/routines", routinesRoutes_1.default);
-//! -----------------------------------------
-//* Inicio del servidor
+app.get("/", (req, res) => {
+    res.json({
+        message: "🏋️‍♂️ Gym Routine Manager API",
+        status: "running",
+        timestamp: new Date().toISOString()
+    });
+});
+app.get("/health", (req, res) => {
+    res.json({
+        status: "OK",
+        message: "Server is running perfectly!",
+        port: PORT,
+        timestamp: new Date().toISOString()
+    });
+});
+app.post("/auth/login", (req, res) => {
+    console.log("🔐 Login attempt received:", req.body);
+    res.json({
+        message: "Login endpoint working!",
+        received: req.body,
+        cors: "enabled"
+    });
+});
+app.use((req, res) => {
+    res.status(404).json({
+        error: "Route not found",
+        method: req.method,
+        path: req.originalUrl,
+        available_routes: ["/", "/health", "/auth/login"]
+    });
+});
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`🚀 DEBUG SERVER running on port ${PORT}`);
+    console.log(`🌐 CORS: Permitido para todos los orígenes (TEMPORAL)`);
+    console.log(`📍 Test URLs:`);
+    console.log(`   - http://localhost:${PORT}/`);
+    console.log(`   - http://localhost:${PORT}/health`);
+    console.log(`   - http://localhost:${PORT}/auth/login`);
 });
